@@ -34,6 +34,9 @@ public class Restaurant {
         this.zipCode = zipCode;
     }
 
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    private List<Meal> meals = new ArrayList<>();
+
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore // para prevenir recursão infinita na serialização JSON. (??)
     private List<RestaurantEvaluation> evaluations = new ArrayList<>();
