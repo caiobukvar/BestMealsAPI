@@ -10,6 +10,7 @@ BestMealsAPI é uma API desenvolvida em **Java com Spring Boot** para gerenciame
 - PostgreSQL (ou qualquer banco de dados compatível com JPA)
 - Swagger para documentação da API
 - Maven para gerenciamento de dependências
+- Eureka para descoberta de serviços
 
 ## Como Rodar o Projeto Localmente
 
