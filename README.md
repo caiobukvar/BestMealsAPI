@@ -1,58 +1,69 @@
 # BestMealsAPI
 
-BestMealsAPI é uma API desenvolvida em **Java com Spring Boot** para gerenciamento de restaurantes e seus respectivos pratos, permitindo cadastrar, listar, atualizar e deletar restaurantes e refeições. 
+BestMealsAPI é uma API para avaliação de restaurantes e refeições, permitindo que os usuários avaliem pratos com até 5 estrelas e consultem os melhores estabelecimentos.
 
 ## Tecnologias Utilizadas
+- **Java**
+- **Spring Boot** (Spring Data JPA, Spring Web, Validation)
+- **H2 Database** (Banco de dados em memória para desenvolvimento e testes)
+- **Swagger** (Documentação da API)
+- **Eureka** (Registro de serviços para arquitetura distribuída)
 
-- Java 17
-- Spring Boot 3
-- Spring Data JPA
-- PostgreSQL (ou qualquer banco de dados compatível com JPA)
-- Swagger para documentação da API
-- Maven para gerenciamento de dependências
-- Eureka para descoberta de serviços
+## Configuração e Instalação
 
-## Como Rodar o Projeto Localmente
-
-### 1. Clonar o Repositório
-```bash
-git clone https://github.com/seu-usuario/bestmeals-api.git
-cd bestmeals-api
+### Clonando o Repositório
+```sh
+git clone https://github.com/caiobukvar/BestMealsAPI.git
+cd BestMealsAPI
 ```
 
-### 2. Configurar o Banco de Dados
-Crie um banco de dados PostgreSQL e configure o arquivo `application.properties`:
+### Configurando o Servidor Eureka
+A aplicação utiliza **Eureka** para registro e descoberta de serviços. Você pode usar um servidor Eureka já configurado no repositório abaixo:
+
+🔗 [Repositório do Eureka Server](https://github.com/caiobukvar/eureka-server)
+
+1. Clone e execute o Eureka Server:
+```sh
+git clone https://github.com/caiobukvar/eureka-server.git
+cd eureka-server
+mvn spring-boot:run
+```
+
+2. No **BestMealsAPI**, certifique-se de que a configuração do `application.properties` contém:
 ```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/bestmeals
-spring.datasource.username=seu_usuario
-spring.datasource.password=sua_senha
-spring.jpa.hibernate.ddl-auto=update
+spring.application.name=best-meals-api
+eureka.client.service-url.defaultZone=http://localhost:8761/eureka/
 ```
 
-### 3. Rodar a Aplicação
-Use o Maven para compilar e iniciar a API:
-```bash
-./mvnw spring-boot:run
-```
-A API estará disponível em `http://localhost:8080`.
-
-## Endpoints da API
-
-A API está documentada com **Swagger**, acessível via:
-```
-http://localhost:8080/swagger-ui.html
+3. Execute a API normalmente:
+```sh
+mvn spring-boot:run
 ```
 
-### 📌 **Restaurantes**
-- **Criar Restaurante**: `POST /api/restaurants`
-- **Listar Todos**: `GET /api/restaurants`
-- **Buscar por ID**: `GET /api/restaurants/{restaurantId}`
-- **Atualizar Restaurante**: `PUT /api/restaurants/{restaurantId}`
-- **Deletar Restaurante**: `DELETE /api/restaurants/{restaurantId}`
+A API agora estará registrada no Eureka Server e disponível para descoberta por outros serviços.
 
-### 📌 **Refeições (Meals)**
-- **Criar Refeição**: `POST /api/restaurants/{restaurantId}/meals`
-- **Listar Refeições de um Restaurante**: `GET /api/restaurants/{restaurantId}/meals`
-- **Buscar uma Refeição**: `GET /api/restaurants/{restaurantId}/meals/{mealId}`
-- **Atualizar Refeição**: `PUT /api/restaurants/{restaurantId}/meals/{mealId}`
-- **Deletar Refeição**: `DELETE /api/restaurants/{restaurantId}/meals/{mealId}`
+## Endpoints Principais
+
+### Restaurantes
+- `POST /api/restaurants` → Criar um restaurante
+- `GET /api/restaurants` → Listar todos os restaurantes
+- `GET /api/restaurants/{id}` → Obter detalhes de um restaurante
+
+### Refeições
+- `POST /api/restaurants/{restaurantId}/meals` → Criar uma refeição para um restaurante
+- `GET /api/restaurants/{restaurantId}/meals` → Listar refeições de um restaurante
+- `GET /api/restaurants/{restaurantId}/meals/{mealId}` → Obter detalhes de uma refeição
+
+### Avaliações
+- `POST /api/restaurants/{restaurantId}/evaluations` → Avaliar um restaurante
+- `POST /api/restaurants/{restaurantId}/meals/{mealId}/evaluations` → Avaliar uma refeição
+
+## Documentação da API
+A API conta com documentação interativa através do Swagger:
+- Acesse **`http://localhost:8080/swagger-ui.html`** após rodar a aplicação.
+
+## Contribuição
+Pull Requests são bem-vindos! Para mudanças maiores, abra uma issue primeiro para discutirmos o que você gostaria de alterar.
+
+---
+🚀 **Criado e mantido por [Caio Bukvar](https://github.com/caiobukvar).**
