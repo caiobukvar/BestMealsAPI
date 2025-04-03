@@ -8,6 +8,8 @@ import siq.BestMealsAPI.repository.MealEvaluationRepository;
 import siq.BestMealsAPI.repository.MealRepository;
 import siq.BestMealsAPI.repository.RestaurantRepository;
 
+import java.util.List;
+
 
 @Service
 public class MealEvaluationService {
@@ -36,5 +38,13 @@ public class MealEvaluationService {
         evaluation.setMeal(meal);
 
         return mealEvaluationRepository.save(evaluation);
+    }
+
+    public List<MealEvaluation> getEvaluationsByMeal(Long mealId) {
+        return mealEvaluationRepository.findByMealId(mealId);
+    }
+
+    public Double getAverageRatingForMeal(Long mealId) {
+        return mealEvaluationRepository.findAverageRatingByMealId(mealId);
     }
 }
