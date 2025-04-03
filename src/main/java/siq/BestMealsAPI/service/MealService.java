@@ -1,6 +1,8 @@
-package siq.BestMealsAPI.model;
+package siq.BestMealsAPI.service;
 
 import org.springframework.stereotype.Service;
+import siq.BestMealsAPI.model.Meal;
+import siq.BestMealsAPI.model.Restaurant;
 import siq.BestMealsAPI.repository.MealRepository;
 import siq.BestMealsAPI.repository.RestaurantRepository;
 
@@ -21,23 +23,22 @@ public class MealService {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new RuntimeException("Restaurant not found"));
 
-        // Create new meal instance to avoid side effects
         Meal newMeal = new Meal();
         newMeal.setName(meal.getName());
         newMeal.setCost(meal.getCost());
         newMeal.setIngredients(meal.getIngredients());
-        newMeal.setRestaurant(restaurant); // Only set via service
+        newMeal.assignRestaurant(restaurant);
 
         return mealRepository.save(newMeal);
     }
 
     public Meal getMeal(Long restaurantId, Long mealId) {
-        return mealRepository.findByIdAndRestaurantId(mealId, restaurantId)
+        return mealRepository.findByIdAndRestaurant_Id(mealId, restaurantId)
                 .orElseThrow(() -> new RuntimeException("Meal not found"));
     }
 
     public List<Meal> getRestaurantMeals(Long restaurantId) {
-        return mealRepository.findByRestaurantId(restaurantId);
+        return mealRepository.findByRestaurant_Id(restaurantId);
     }
 
     public Meal updateMeal(Long restaurantId, Long mealId, Meal mealDetails) {

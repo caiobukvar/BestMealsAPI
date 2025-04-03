@@ -1,30 +1,39 @@
 package siq.BestMealsAPI.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 
 @Entity
 public class Meal {
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // @Schema para adicionar ex no swagger
+    @Schema(example = "Coxinha")
     @NotBlank
     private String name;
 
+    @Schema(example = "10.9")
     @Positive
     private double cost;
 
+    @Schema(example = "Massa de mandioca, frango e requeijão")
     @NotBlank
     private String ingredients;
 
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "restaurant_id")
-    private Restaurant restaurant;  // Proper object reference, not String
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    private Restaurant restaurant;
 
+    public void assignRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
 
     public Meal() {}
 
@@ -33,12 +42,6 @@ public class Meal {
         this.restaurant = restaurant;
         this.cost = cost;
         this.ingredients = ingredients;
-    }
-
-
-    // removendo da rota pública
-    protected void setRestaurant(Restaurant  restaurant) {
-        this.restaurant = restaurant;
     }
 
     public Long getId() {

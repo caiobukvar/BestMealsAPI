@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MealRepository extends JpaRepository<Meal, Long> {
-    List<Meal> findByRestaurantId(Long restaurantId);
-    Optional<Meal> findByIdAndRestaurantId(Long id, Long restaurantId);
+    List<Meal> findByRestaurant_Id(Long restaurantId);
+    Optional<Meal> findByIdAndRestaurant_Id(Long id, Long restaurantId);
 }
