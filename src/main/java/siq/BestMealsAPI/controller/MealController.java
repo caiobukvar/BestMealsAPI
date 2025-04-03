@@ -1,5 +1,6 @@
 package siq.BestMealsAPI.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,47 +14,30 @@ import java.util.List;
 public class MealController {
     private final MealService mealService;
 
+    @Autowired
     public MealController(MealService mealService) {
         this.mealService = mealService;
     }
 
     @PostMapping
-    public ResponseEntity<Meal> createMeal(
-            @PathVariable Long restaurantId,
-            @RequestBody Meal mealRequest) {
-        Meal createdMeal = mealService.createMeal(restaurantId, mealRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdMeal);
+    public ResponseEntity<Meal> createMeal(@PathVariable Long restaurantId, @RequestBody Meal meal) {
+        Meal savedMeal = mealService.createMeal(meal);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedMeal);
     }
 
     @GetMapping("/{mealId}")
-    public ResponseEntity<Meal> getMeal(
-            @PathVariable Long restaurantId,
-            @PathVariable Long mealId) {
-        Meal meal = mealService.getMeal(restaurantId, mealId);
-        return ResponseEntity.ok(meal);
+    public ResponseEntity<Meal> getMeal(@PathVariable Long restaurantId, @PathVariable Long mealId) {
+        return ResponseEntity.ok(mealService.getMealById(mealId, restaurantId));
     }
 
     @GetMapping
-    public ResponseEntity<List<Meal>> getRestaurantMeals(
-            @PathVariable Long restaurantId) {
-        List<Meal> meals = mealService.getRestaurantMeals(restaurantId);
-        return ResponseEntity.ok(meals);
-    }
-
-    @PutMapping("/{mealId}")
-    public ResponseEntity<Meal> updateMeal(
-            @PathVariable Long restaurantId,
-            @PathVariable Long mealId,
-            @RequestBody Meal mealDetails) {
-        Meal updatedMeal = mealService.updateMeal(restaurantId, mealId, mealDetails);
-        return ResponseEntity.ok(updatedMeal);
+    public ResponseEntity<List<Meal>> getAllMeals(@PathVariable Long restaurantId) {
+        return ResponseEntity.ok(mealService.getMealsByRestaurant(restaurantId));
     }
 
     @DeleteMapping("/{mealId}")
-    public ResponseEntity<Void> deleteMeal(
-            @PathVariable Long restaurantId,
-            @PathVariable Long mealId) {
-        mealService.deleteMeal(restaurantId, mealId);
+    public ResponseEntity<Void> deleteMeal(@PathVariable Long restaurantId, @PathVariable Long mealId) {
+        mealService.deleteMeal(mealId);
         return ResponseEntity.noContent().build();
     }
 }

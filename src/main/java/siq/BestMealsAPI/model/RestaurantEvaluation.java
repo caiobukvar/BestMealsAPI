@@ -7,7 +7,7 @@ import jakarta.validation.constraints.*;
 @Entity
 @Table(name = "restaurant_evaluations")
 public class RestaurantEvaluation {
-
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,6 +20,7 @@ public class RestaurantEvaluation {
     @Size(max = 500, message = "Comment cannot exceed 500 characters")
     private String comment;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;

@@ -1,52 +1,47 @@
 package siq.BestMealsAPI.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import siq.BestMealsAPI.model.Restaurant;
 import siq.BestMealsAPI.model.RestaurantEvaluation;
 import siq.BestMealsAPI.repository.RestaurantEvaluationRepository;
-import siq.BestMealsAPI.repository.RestaurantRepository;
 
 import java.util.List;
 
 @Service
 public class RestaurantEvaluationService {
-
     private final RestaurantEvaluationRepository evaluationRepository;
-    private final RestaurantRepository restaurantRepository;
+    private final RestTemplate restTemplate;
 
-    public RestaurantEvaluationService(RestaurantEvaluationRepository evaluationRepository,
-                                       RestaurantRepository restaurantRepository) {
+    @Value("${services.restaurant-service}")
+    private String restaurantServiceUrl;
+
+    public RestaurantEvaluationService(RestaurantEvaluationRepository evaluationRepository, RestTemplate restTemplate) {
         this.evaluationRepository = evaluationRepository;
-        this.restaurantRepository = restaurantRepository;
+        this.restTemplate = restTemplate;
     }
 
-    // criar uma avaliação de restaurante
     public RestaurantEvaluation createEvaluation(Long restaurantId, RestaurantEvaluation evaluation) {
-        Restaurant restaurant = restaurantRepository.findById(restaurantId)
-                .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+        String restaurantUrl = restaurantServiceUrl + "/restaurants/" + restaurantId;
 
-        evaluation.setRestaurant(restaurant);
+        try {
+            Restaurant restaurant = restTemplate.getForObject(restaurantUrl, Restaurant.class);
+            if (restaurant == null) {
+                throw new RuntimeException("Restaurant not found in restaurant service");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to connect to restaurant service", e);
+        }
+
         return evaluationRepository.save(evaluation);
     }
 
-    // listar todas as avaliações de um restaurante
-    public List<RestaurantEvaluation> getEvaluationsByRestaurantId(Long restaurantId) {
+    public List<RestaurantEvaluation> getRestaurantEvaluations(Long restaurantId) {
         return evaluationRepository.findByRestaurantId(restaurantId);
     }
 
-    // lista a média das avaliações de um restaurante (utilizando STREAMS)
-    public Double getAverageRatingForRestaurant(Long restaurantId) {
-        double average = evaluationRepository.findByRestaurantId(restaurantId).stream()
-                .mapToInt(RestaurantEvaluation::getRating)
-                .average()
-                .orElse(0.0);
-
-        // .stream() -> cria uma stream
-        // .mapToInt(RestaurantEvaluation::getRating) -> transforma a stream em IntStream -> extrai a 'rating' de cada avaliação
-        // .average() -> faz a média entre os dados
-        // .orElse(0.0) -> se não encontrar ratings, retorna 0
-
-        // formata a média final para máx 2 decimais
-        return Math.round(average * 100) / 100.0;
+    public void deleteEvaluation(Long evaluationId) {
+        evaluationRepository.deleteById(evaluationId);
     }
 }

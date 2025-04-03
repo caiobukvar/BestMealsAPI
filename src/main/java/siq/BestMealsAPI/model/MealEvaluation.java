@@ -1,21 +1,23 @@
 package siq.BestMealsAPI.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 
 @Entity
-@JsonIgnoreProperties(value = { "id", "restaurant", "meal"}, allowGetters = true)
 public class MealEvaluation {
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "meal_id", nullable = false)
     private Meal meal;
