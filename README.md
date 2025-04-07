@@ -5,7 +5,7 @@ BestMealsAPI é uma API para avaliação de restaurantes e refeições, permitin
 ## Tecnologias Utilizadas
 - **Java**
 - **Spring Boot** (Spring Data JPA, Spring Web, Validation)
-- **H2 Database** (Banco de dados em memória para desenvolvimento e testes)
+- **PostgreSQL** (Banco de dados)
 - **Swagger** (Documentação da API)
 - **Eureka** (Registro de serviços para arquitetura distribuída)
 
