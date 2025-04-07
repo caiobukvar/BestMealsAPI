@@ -13,7 +13,6 @@ public class Meal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // @Schema para adicionar ex no swagger
     @Schema(example = "Coxinha")
     @NotBlank
     private String name;
