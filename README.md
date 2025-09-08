@@ -1,6 +1,6 @@
 # BestMealsAPI
 
-BestMealsAPI é uma API para avaliação de restaurantes e refeições, permitindo que os usuários avaliem pratos com até 5 estrelas e consultem os melhores estabelecimentos.
+BestMealsAPI é uma API cujo objetivo é permitir que os usuários avaliem pratos, gerando um ranking com as melhores opções da cidade. Para validar a ideia, foi criado um MVP que possibilita registrar refeições, atribuir notas e consultar os pratos mais bem avaliados.
 
 ## Tecnologias Utilizadas
 - **Java**
@@ -8,6 +8,7 @@ BestMealsAPI é uma API para avaliação de restaurantes e refeições, permitin
 - **PostgreSQL** (Banco de dados)
 - **Swagger** (Documentação da API)
 - **Eureka** (Registro de serviços para arquitetura distribuída)
+- **API Gateway** (Gerenciamento de microserviços)
 
 ## Configuração e Instalação
 
